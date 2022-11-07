@@ -24,13 +24,5 @@ public class DataTest {
         Assert.assertEquals(false, json.isEmpty());
     }
 
-    // Testet ob DataPaser die Daten korrekt parst oder ein leeres Ergebnis zurück gibt
-    @Test
-    public void testDataParser(){
-        DataLoader dataLoader = new DataLoader();
-        DataParser dataParser = new DataParser();
-        String json = dataLoader.loadJsonFile("countries-aggregated_json.json");
-        Assert.assertEquals(false, dataParser.parseJsonData(json).isEmpty());
-    }
 
 }

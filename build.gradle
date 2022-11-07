@@ -126,7 +126,7 @@ task copyData(type: Copy, dependsOn: unzipData){
 
 
 // Baue die Testfaelle - Tests werden beim Bauen einmal durchlaufen
-task buildTests(){
+task buildTests{
     doLast{
         sourceSets{
             test{
