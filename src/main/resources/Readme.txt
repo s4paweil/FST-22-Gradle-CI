@@ -1,1 +1,0 @@
-copy resources in this folder

@@ -43,6 +43,8 @@ test {
     useJUnit()
 }
 
+
+// buildCore baut außschlielich die Klassen des core-Packages (dementsprechend auch nicht die Tests!)
 task buildCore(dependsOn: 'copyData') {
     doLast{
         sourceSets{
@@ -52,17 +54,30 @@ task buildCore(dependsOn: 'copyData') {
                     exclude '**/ui/*.java'
                 }
             }
+            test{
+                java{
+                    srcDir 'src/test/java'
+                    exclude '*'
+                }
+            }
         }
     }
     finalizedBy(build)
 }
 
+// buildUI baut lediglich die Klassen des core- und des ui-Packages (dementsprechend nicht die Tests)
 task buildUI(dependsOn: 'copyData'){
     doLast{
         sourceSets{
             main{
                 java{
                     srcDir 'src/main/java'
+                }
+            }
+            test{
+                java{
+                    srcDir 'src/test/java'
+                    exclude '*'
                 }
             }
         }
@@ -108,3 +123,22 @@ task copyData(type: Copy, dependsOn: unzipData){
     from copyFile
     into copyLocation
 }
+
+
+// Baue die Testfaelle - Tests werden beim Bauen einmal durchlaufen
+task buildTests(){
+    doLast{
+        sourceSets{
+            test{
+                java{
+                    srcDir 'src/test/java'
+                }
+            }
+        }
+    }
+    finalizedBy(build)
+}
+
+
+
+
