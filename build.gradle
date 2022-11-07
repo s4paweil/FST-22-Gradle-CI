@@ -1,0 +1,110 @@
+plugins {
+    // Lade java um Programm bauen zu können
+    id 'java'
+
+    // Lade javafx Plugin
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+
+    // Lade application um Programm aushüren zu können
+    id 'application'
+
+    // Lade Download Plugin
+    id "de.undercouch.download" version "5.3.0"
+}
+
+
+
+
+group 'de.unitrier.st'
+version '1.0-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // jUnit für Tests
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+
+    // Gson Java Bibliothek
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10'
+
+}
+
+
+// Definiere Version und spezifiziere Mdoule von javafx
+javafx {
+    version = '11.0.2'
+    modules = ['javafx.controls', 'javafx.base', 'javafx.graphics']
+}
+
+test {
+    useJUnit()
+}
+
+task buildCore(dependsOn: 'copyData') {
+    doLast{
+        sourceSets{
+            main{
+                java{
+                    srcDir 'src/main/java'
+                    exclude '**/ui/*.java'
+                }
+            }
+        }
+    }
+    finalizedBy(build)
+}
+
+task buildUI(dependsOn: 'copyData'){
+    doLast{
+        sourceSets{
+            main{
+                java{
+                    srcDir 'src/main/java'
+                }
+            }
+        }
+    }
+    finalizedBy(build)
+}
+
+task runCore(dependsOn: buildCore){
+    doLast{
+        mainClassName ='de.unitrier.st.core.Main'
+    }
+    finalizedBy(run)
+}
+
+task runUI(dependsOn: buildUI){
+    doLast{
+        mainClassName ='de.unitrier.st.ui.Ui'
+    }
+    finalizedBy(run)
+}
+
+// Task zum Herunterladen der erforderlichen Covid19-Datei
+task downloadData(type: Download){
+    src 'https://datahub.io/core/covid-19/r/covid-19_zip.zip'
+    dest buildDir
+    onlyIfModified true
+}
+
+// Entpacken der Covid19-Datei
+task unzipData(type: Copy, dependsOn: downloadData){
+    def zippedFolder = file("$buildDir/covid-19_zip.zip")
+    def unzippedFolder = file("$buildDir/covid-19_zip")
+
+    from zipTree(zippedFolder)
+    into unzippedFolder
+}
+
+// Verschieben der benötigten Datei in den 'resource'-Ordner
+task copyData(type: Copy, dependsOn: unzipData){
+    def copyFile = file("$buildDir/covid-19_zip/data/countries-aggregated_json.json")
+    def copyLocation = file("src/main/resources")
+
+    from copyFile
+    into copyLocation
+}
