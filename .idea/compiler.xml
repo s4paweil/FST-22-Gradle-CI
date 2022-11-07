@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="FST-22-Gradle-CI.core" target="17" />
+      <module name="FST-22-Gradle-CI.ui" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
