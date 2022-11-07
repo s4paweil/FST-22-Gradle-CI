@@ -14,7 +14,7 @@ public class DataLoader {
             String str;
             while ((str = br.readLine()) != null) {
                 System.out.println(str);
-                json.append(str);
+                //json.append(str);
             }
             br.close();
         } catch (FileNotFoundException e) {
